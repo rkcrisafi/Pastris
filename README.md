@@ -24,7 +24,7 @@ This app will consist of a single screen with game field and nav links to the Gi
 
 
 ## MainScreen
-[[/images/pastry.png]]
+![wireframes](https://github.com/rkcrisafi/Pastris/blob/master/images/pastry.png)
 
 ### Architecture and Technologies
 
