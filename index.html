@@ -4,14 +4,12 @@
     <meta charset="utf-8">
     <title>Pastris!!!</title>
   </head>
-  <body>
+  <body style="background: blue;"
+              "margin: auto;">
     <canvas id="canvas" width="200" height="420"></canvas>
     <script>
       const canvas = document.getElementById('canvas');
       const context = canvas.getContext('2d');
-
-      context.fillStyle = '#000';
-      context.fillRect(0, 0, canvas.width, canvas.height)
 
       const blockSize = 20;
 
@@ -23,6 +21,9 @@
         return grid;
       }
 
+      let field = grid(10, 21);
+
+
       function buildPiece(letter) {
         if (letter === "I") {
           return [
@@ -33,41 +34,43 @@
           ]
         } else if (letter === "J") {
           return [
-            [0, 1, 0],
-            [0, 1, 0],
-            [1, 1, 0]
+            [0, 2, 0],
+            [0, 2, 0],
+            [2, 2, 0]
           ]
         } else if (letter === "L") {
           return [
-            [0, 1, 0],
-            [0, 1, 0],
-            [0, 1, 1]
+            [0, 3, 0],
+            [0, 3, 0],
+            [0, 3, 3]
           ]
         } else if (letter === "O") {
           return [
-            [1, 1],
-            [1, 1]
+            [4, 4],
+            [4, 4]
           ]
         } else if (letter === "S") {
           return [
             [0, 0, 0],
-            [0, 1, 1],
-            [1, 1, 0]
+            [0, 5, 5],
+            [5, 5, 0]
           ]
         } else if (letter === "T") {
           return [
             [0, 0, 0],
-            [1, 1, 1],
-            [0, 1, 0]
+            [6, 6, 6],
+            [0, 6, 0]
           ]
         } else if (letter === "Z") {
           return [
             [0, 0, 0],
-            [1, 1, 0],
-            [0, 1, 1]
+            [7, 7, 0],
+            [0, 7, 7]
           ]
         }
       }
+
+      const pieceColors = ["#2df2f0", "#0000f0", "#eea006", "#f0f409", "#2ef604", "#9c00f0", "#ed0005"]
 
 
       function collide(field, playedPiece) {
@@ -88,12 +91,12 @@
       function destroyRow() {
         let fullRows = [];
         field.forEach((row, rowNumber) => {
-          if (row.every(val => val === 1)) {
+          if (row.every(val => val !== 0)) {
             fullRows.push(rowNumber)
           }
         })
         if (fullRows.length > 0 ) {
-          fullRows.reverse().forEach(rowNum => {
+          fullRows.forEach(rowNum => {
             field.splice(rowNum, 1)
             field.unshift(new Array(10).fill(0))
           })
@@ -101,38 +104,35 @@
       }
 
 
+      function isGameOver() {
+        if (field[0].some(el => el !== 0)) {
+          console.log("Game Over");
+          field = field.map(row => {
+            return row.map(value => 0)
+          })
+        }
+      }
 
       function draw() {
         context.fillStyle = '#000';
         context.fillRect(0, 0, canvas.width, canvas.height)
-
 
         drawPiece(field, {x: 0, y: 0});
         drawPiece(playedPiece.form, playedPiece.pos);
       }
 
 
-      function createPiece(width, height) {
-        const piece = [];
-        for (let i = h; i > 0; i--) {
-          piece.push(new Array(width).fill(0));
-        }
-        return piece;
-      }
-
 
       function drawPiece(piece, move) {
         piece.forEach((row, y) => {
           row.forEach((val, x) => {
             if (val !== 0) {
-              context.fillStyle = '#9c00f2';
+              context.fillStyle = pieceColors[val-1];
               context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
             }
           })
         })
       }
-
-      const field = grid(10, 21);
 
 
       function mergePiece(field, playedPiece) {
@@ -184,6 +184,7 @@
         }
         dropCounter = 0;
         destroyRow();
+        isGameOver();
       }
 
 
@@ -210,8 +211,8 @@
         }
       })
 
-      function rotate(piece) {
 
+      function rotate(piece) {
         piece = piece.reverse();
         let result = new Array(piece[0].length).fill(true).map(el => []);
 
