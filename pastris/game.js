@@ -25,16 +25,15 @@ class Game {
     this.setEventListener();
     this.paused = false;
     this.restart = false;
-    this.score = 0;
 
     this.dropCounter = 0;
-    this.fallingInterval = 500;
+    this.fallingInterval = 1000;
     this.previousTime = 0;
     this.update();
   }
 
   loadImages() {
-    const imageSources = ["images/banana_bread.png", "images/cherry_cake.png", "images/croissant.png", "images/cupcake.png", "images/donut.png", "images/ice_cream.png", "images/lolipop.png"];
+    const imageSources = ["images/banana_bread.png", "images/cherry_cake.png", "images/cookie.png", "images/cupcake.png", "images/donut.png", "images/ice_cream.png", "images/lolipop.png"];
     return imageSources.map(source => {
       const img = new Image();
       img.src = source;
@@ -45,19 +44,7 @@ class Game {
 
 
   update(time = 0) {
-    // const delta = time - this.previousTime;
-    // // this.previousTime = time;
-    // //
-    // // this.dropCounter += delta;
-    // // if (this.dropCounter > this.fallingInterval) {
-    // //
-    // //   this.playedPiece = this.field.hitBottom(this.playedPiece);
-    // //   this.dropCounter = 0;
-    // // }
-    if (this.restart) {
-      this.startNewGame();
-      this.restart = false;
-    }
+
     if (!this.paused) {
       const delta = time - this.previousTime;
       this.previousTime = time;
@@ -67,10 +54,30 @@ class Game {
 
         this.playedPiece = this.field.hitBottom(this.playedPiece);
         this.dropCounter = 0;
+        if (this.field.score >= 135000) {
+          this.fallingInterval = 100;
+        } else if (this.field.score >= 45000) {
+          this.fallingInterval = 250;
+        } else if (this.field.score >= 15000){
+          this.fallingInterval = 500;
+        } else if (this.field.score >= 5000) {
+          this.fallingInterval = 750;
+        }
       }
       this.field.draw(this.playedPiece, this.images);
     }
-    requestAnimationFrame(this.update.bind(this));
+    if (!this.field.gameOver) {
+      requestAnimationFrame(this.update.bind(this));
+    } else {
+      this.drawGameOver();
+
+    }
+  }
+
+  drawGameOver () {
+    this.context.font = '40px serif';
+    this.context.fillStyle = "red";
+    this.context.fillText('Game Over', 8, 220);
   }
 
   onKeydown (e) {
@@ -94,8 +101,8 @@ class Game {
       }
     } else if (e.key === "p") {
       this.paused = this.paused ? false : true;
-    } else if (e.key === "r") {
-      this.restart = true;
+    } else if (e.key === "s") {
+      this.startNewGame();
     }
   }
 
@@ -105,14 +112,17 @@ class Game {
   }
 
   deleteEventListener () {
-    // this.onKeydown = this.onKeydown.bind(this);
-
     document.removeEventListener('keydown', this.onKeydown);
+  }
+
+}
+
+function startGame(e) {
+  if (e.key === "s") {
+    let game = new Game();
+    document.removeEventListener("keydown", startGame);
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    let game1 = new Game();
-    }
-  );
+document.addEventListener("keydown", startGame);
 // game1.startNewGame();

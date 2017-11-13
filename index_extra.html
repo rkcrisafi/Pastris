@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pastris!!!</title>
+  </head>
+  <body style="background: blue;"
+              "margin: auto;">
+    <canvas id="canvas" width="200" height="420"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      const blockSize = 20;
+
+      const grid = (width, height) => {
+        let grid = [];
+        for (let i = 0; i < height; i ++ ) {
+          grid.push(new Array(width).fill(0))
+        }
+        return grid;
+      }
+
+      let field = grid(10, 21);
+
+
+      function buildPiece(letter) {
+        if (letter === "I") {
+          return [
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0]
+          ]
+        } else if (letter === "J") {
+          return [
+            [0, 2, 0],
+            [0, 2, 0],
+            [2, 2, 0]
+          ]
+        } else if (letter === "L") {
+          return [
+            [0, 3, 0],
+            [0, 3, 0],
+            [0, 3, 3]
+          ]
+        } else if (letter === "O") {
+          return [
+            [4, 4],
+            [4, 4]
+          ]
+        } else if (letter === "S") {
+          return [
+            [0, 0, 0],
+            [0, 5, 5],
+            [5, 5, 0]
+          ]
+        } else if (letter === "T") {
+          return [
+            [0, 0, 0],
+            [6, 6, 6],
+            [0, 6, 0]
+          ]
+        } else if (letter === "Z") {
+          return [
+            [0, 0, 0],
+            [7, 7, 0],
+            [0, 7, 7]
+          ]
+        }
+      }
+
+      const pieceColors = ["#2df2f0", "#0000f0", "#eea006", "#f0f409", "#2ef604", "#9c00f0", "#ed0005"]
+
+
+      function collide(field, playedPiece) {
+        const form = playedPiece.form;
+        const pos = playedPiece.pos;
+        for (let y = 0; y < form.length; y++) {
+          for (let x = 0; x < form[y].length; x++) {
+            if (form[y][x] !== 0 &&
+                (field[y + pos.y] &&
+                field[y+pos.y][x+pos.x]) !== 0) {
+                  return true;
+            }
+          }
+        }
+        return false;
+      }
+
+      function destroyRow() {
+        let fullRows = [];
+        field.forEach((row, rowNumber) => {
+          if (row.every(val => val !== 0)) {
+            fullRows.push(rowNumber)
+          }
+        })
+        if (fullRows.length > 0 ) {
+          fullRows.forEach(rowNum => {
+            field.splice(rowNum, 1)
+            field.unshift(new Array(10).fill(0))
+          })
+        }
+      }
+
+
+      function isGameOver() {
+        if (field[0].some(el => el !== 0)) {
+          console.log("Game Over");
+          field = field.map(row => {
+            return row.map(value => 0)
+          })
+        }
+      }
+
+      function draw() {
+        context.fillStyle = '#000';
+        context.fillRect(0, 0, canvas.width, canvas.height)
+
+        drawPiece(field, {x: 0, y: 0});
+        drawPiece(playedPiece.form, playedPiece.pos);
+      }
+
+
+
+      function drawPiece(piece, move) {
+        piece.forEach((row, y) => {
+          row.forEach((val, x) => {
+            if (val !== 0) {
+              context.fillStyle = pieceColors[val-1];
+              context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
+            }
+          })
+        })
+      }
+
+
+      function mergePiece(field, playedPiece) {
+        playedPiece.form.forEach((row, y) => {
+          row.forEach((val, x) => {
+            if (val !== 0) {
+              field[y+playedPiece.pos.y][x+playedPiece.pos.x] = val;
+            }
+          })
+        })
+      }
+
+
+
+      let dropCounter = 0;
+      let dropInterval = 500;
+      let lastTime = 0;
+
+      function update(time = 0) {
+        const delta = time - lastTime;
+        lastTime = time;
+
+        dropCounter += delta;
+        if (dropCounter > dropInterval) {
+          hitBottom();
+        }
+
+        draw();
+        requestAnimationFrame(update);
+      }
+
+      let letterShapes = "IJLOSTZ";
+
+      function newPlayedPiece() {
+          let pos = {x: 3, y: 0}
+          let form = buildPiece(letterShapes[Math.floor(Math.random() * 7)])
+          return { pos, form }
+      }
+
+      let playedPiece = newPlayedPiece();
+
+      function hitBottom() {
+        playedPiece.pos.y ++;
+        if (collide(field, playedPiece)) {
+          playedPiece.pos.y --;
+          mergePiece(field, playedPiece);
+          playedPiece.pos.y = 0;
+          playedPiece = newPlayedPiece();
+        }
+        dropCounter = 0;
+        destroyRow();
+        isGameOver();
+      }
+
+
+      document.addEventListener('keydown', e => {
+        if (e.key === "ArrowDown") {
+          hitBottom();
+        } else if (e.key === "ArrowLeft") {
+          playedPiece.pos.x --;
+          if (collide(field, playedPiece)) {
+            playedPiece.pos.x ++;
+          }
+        } else if (e.key === "ArrowRight") {
+          playedPiece.pos.x ++;
+          if (collide(field, playedPiece)) {
+            playedPiece.pos.x --;
+          }
+        } else if (e.key === "ArrowUp") {
+          let originalPiece = playedPiece.form.map(el => el.slice());
+          playedPiece.form = rotate(playedPiece.form);
+          if (collide(field, playedPiece)) {
+            playedPiece.form = originalPiece;
+          }
+
+        }
+      })
+
+
+      function rotate(piece) {
+        piece = piece.reverse();
+        let result = new Array(piece[0].length).fill(true).map(el => []);
+
+        for (let i = 0; i < piece.length; i++) {
+          for (let j = 0; j < piece[0].length; j++) {
+            result[j].push(piece[i][j])
+          }
+        }
+        return result;
+      }
+
+
+      update();
+
+
+
+
+    </script>
+  </body>
+</html>

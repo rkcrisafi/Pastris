@@ -8,9 +8,16 @@ class Grid {
       }
       this.grid = theGrid;
 
+
     this.canvas = canvas;
     this.context = context;
+    this.score = 0;
+    this.updateScore();
+    this.gameOver = false;
+}
 
+updateScore() {
+  document.getElementById("score").innerText = this.score;
 }
 
   destroyRow() {
@@ -20,21 +27,30 @@ class Grid {
         fullRows.push(rowNumber);
       }
     });
-    if (fullRows.length > 0 ) {
+    if (fullRows.length > 0) {
+      if (fullRows.length === 1) {
+        this.score += 40;
+      } else if (fullRows.length === 2) {
+        this.score += 100;
+      } else if (fullRows.length === 3) {
+        this.score += 300;
+      } else if (fullRows.length === 4) {
+        this.score += 1200;
+      }
+      this.updateScore();
       fullRows.forEach(rowNum => {
         this.grid.splice(rowNum, 1);
         this.grid.unshift(new Array(10).fill(0));
       });
     }
+
   }
 
   isGameOver() {
     if (this.grid[0].some(el => el !== 0)) {
-      console.log("Game Over");
-      this.grid = this.grid.map(row => {
-        return row.map(value => 0);
-      });
+      this.gameOver = true;
     }
+
   }
 
 
@@ -66,7 +82,7 @@ class Grid {
       playedPiece.pos.y = 0;
       playedPiece = Piece.newPlayedPiece();
     }
-    this.destroyRow();
+    this.destroyRow(score);
     this.isGameOver();
     return playedPiece;
   }
