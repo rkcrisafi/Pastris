@@ -78,77 +78,117 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 class Game {
   constructor () {
     this.canvas = document.getElementById('canvas');
+    this.canvas.setAttribute("width", 200);
+    this.canvas.setAttribute("height", 420);
     this.context = canvas.getContext('2d');
+
+    this.images = this.loadImages();
+    setTimeout(() => this.startNewGame(), 100);
 
   }
 
   startNewGame() {
 
-    this.context.fillStyle = '#000';
+    this.context.fillStyle = '#ffffff';
     this.context.fillRect(0, 0, canvas.width, canvas.height);
 
     this.field = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](10, 21, this.context, this.canvas);
     this.playedPiece = __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */].newPlayedPiece();
     this.deleteEventListener();
     this.setEventListener();
+    this.paused = false;
+    this.restart = false;
+    this.score = 0;
 
     this.dropCounter = 0;
     this.fallingInterval = 500;
     this.previousTime = 0;
-
     this.update();
+  }
+
+  loadImages() {
+    const imageSources = ["images/banana_bread.png", "images/cherry_cake.png", "images/croissant.png", "images/cupcake.png", "images/donut.png", "images/ice_cream.png", "images/lolipop.png"];
+    return imageSources.map(source => {
+      const img = new Image();
+      img.src = source;
+      return img;
+    });
+
   }
 
 
   update(time = 0) {
-    const delta = time - this.previousTime;
-    this.previousTime = time;
-
-    this.dropCounter += delta;
-    if (this.dropCounter > this.fallingInterval) {
-
-      this.playedPiece = this.field.hitBottom(this.playedPiece);
-      this.dropCounter = 0;
+    // const delta = time - this.previousTime;
+    // // this.previousTime = time;
+    // //
+    // // this.dropCounter += delta;
+    // // if (this.dropCounter > this.fallingInterval) {
+    // //
+    // //   this.playedPiece = this.field.hitBottom(this.playedPiece);
+    // //   this.dropCounter = 0;
+    // // }
+    if (this.restart) {
+      this.startNewGame();
+      this.restart = false;
     }
+    if (!this.paused) {
+      const delta = time - this.previousTime;
+      this.previousTime = time;
 
-    this.field.draw(this.playedPiece);
+      this.dropCounter += delta;
+      if (this.dropCounter > this.fallingInterval) {
+
+        this.playedPiece = this.field.hitBottom(this.playedPiece);
+        this.dropCounter = 0;
+      }
+      this.field.draw(this.playedPiece, this.images);
+    }
     requestAnimationFrame(this.update.bind(this));
   }
 
   onKeydown (e) {
-    if (e.key === "ArrowDown") {
+    if (e.key === "ArrowDown" && (!this.paused)) {
       this.playedPiece = this.field.hitBottom(this.playedPiece);
-    } else if (e.key === "ArrowLeft") {
+    } else if (e.key === "ArrowLeft" && !this.paused) {
       this.playedPiece.pos.x --;
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.pos.x ++;
       }
-    } else if (e.key === "ArrowRight") {
+    } else if (e.key === "ArrowRight" && !this.paused) {
       this.playedPiece.pos.x ++;
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.pos.x --;
       }
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === "ArrowUp" && !this.paused) {
       let originalPiece = this.playedPiece.form.map(el => el.slice());
       this.playedPiece.form = this.field.rotate(this.playedPiece.form);
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.form = originalPiece;
       }
-
+    } else if (e.key === "p") {
+      this.paused = this.paused ? false : true;
+    } else if (e.key === "r") {
+      this.restart = true;
     }
   }
 
   setEventListener() {
-    document.addEventListener('keydown', this.onKeydown.bind(this));
+    this.onKeydown = this.onKeydown.bind(this);
+    document.addEventListener('keydown', this.onKeydown);
   }
 
   deleteEventListener () {
-    document.removeEventListener('keydown', this.onKeydown.bind(this));
+    // this.onKeydown = this.onKeydown.bind(this);
+
+    document.removeEventListener('keydown', this.onKeydown);
   }
 }
 
-let game1 = new Game();
-game1.startNewGame();
+document.addEventListener("DOMContentLoaded", () => {
+    let game1 = new Game();
+    }
+  );
+// game1.startNewGame();
 
 
 /***/ }),
@@ -159,6 +199,7 @@ game1.startNewGame();
 "use strict";
 const pieceColors = ["#2df2f0", "#0000f0", "#eea006", "#f0f409", "#2ef604", "#9c00f0", "#ed0005"];
 const blockSize = 20;
+
 
 const letterShapes = "IJLOSTZ";
 
@@ -211,12 +252,12 @@ const Piece = {
       }
     },
 
-    drawPiece: (piece, move, context) => {
+    drawPiece: (piece, move, context, images) => {
       piece.forEach((row, y) => {
         row.forEach((val, x) => {
           if (val !== 0) {
-            context.fillStyle = pieceColors[val-1];
-            context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
+            context.drawImage(images[val-1], blockSize*(x+move.x), blockSize*(y+move.y), blockSize, blockSize);
+            // context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
           }
         });
       });
@@ -282,12 +323,12 @@ class Grid {
   }
 
 
-  draw(playedPiece) {
-    this.context.fillStyle = '#000';
+  draw(playedPiece, images) {
+    this.context.fillStyle = '#4b1a05';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    __WEBPACK_IMPORTED_MODULE_0__piece_js__["a" /* default */].drawPiece(this.grid, {x: 0, y: 0}, this.context);
-    __WEBPACK_IMPORTED_MODULE_0__piece_js__["a" /* default */].drawPiece(playedPiece.form, playedPiece.pos, this.context);
+    __WEBPACK_IMPORTED_MODULE_0__piece_js__["a" /* default */].drawPiece(this.grid, {x: 0, y: 0}, this.context, images);
+    __WEBPACK_IMPORTED_MODULE_0__piece_js__["a" /* default */].drawPiece(playedPiece.form, playedPiece.pos, this.context, images);
   }
 
 

@@ -1,6 +1,7 @@
 const pieceColors = ["#2df2f0", "#0000f0", "#eea006", "#f0f409", "#2ef604", "#9c00f0", "#ed0005"];
 const blockSize = 20;
 
+
 const letterShapes = "IJLOSTZ";
 
 
@@ -52,12 +53,12 @@ const Piece = {
       }
     },
 
-    drawPiece: (piece, move, context) => {
+    drawPiece: (piece, move, context, images) => {
       piece.forEach((row, y) => {
         row.forEach((val, x) => {
           if (val !== 0) {
-            context.fillStyle = pieceColors[val-1];
-            context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
+            context.drawImage(images[val-1], blockSize*(x+move.x), blockSize*(y+move.y), blockSize, blockSize);
+            // context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
           }
         });
       });

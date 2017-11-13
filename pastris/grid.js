@@ -38,12 +38,12 @@ class Grid {
   }
 
 
-  draw(playedPiece) {
-    this.context.fillStyle = '#000';
+  draw(playedPiece, images) {
+    this.context.fillStyle = '#4b1a05';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    Piece.drawPiece(this.grid, {x: 0, y: 0}, this.context);
-    Piece.drawPiece(playedPiece.form, playedPiece.pos, this.context);
+    Piece.drawPiece(this.grid, {x: 0, y: 0}, this.context, images);
+    Piece.drawPiece(playedPiece.form, playedPiece.pos, this.context, images);
   }
 
 
