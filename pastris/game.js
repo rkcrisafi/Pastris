@@ -82,18 +82,22 @@ class Game {
 
   onKeydown (e) {
     if (e.key === "ArrowDown" && (!this.paused)) {
+      e.preventDefault();
       this.playedPiece = this.field.hitBottom(this.playedPiece);
     } else if (e.key === "ArrowLeft" && !this.paused) {
+      e.preventDefault();
       this.playedPiece.pos.x --;
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.pos.x ++;
       }
     } else if (e.key === "ArrowRight" && !this.paused) {
+      e.preventDefault();
       this.playedPiece.pos.x ++;
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.pos.x --;
       }
     } else if (e.key === "ArrowUp" && !this.paused) {
+      e.preventDefault();
       let originalPiece = this.playedPiece.form.map(el => el.slice());
       this.playedPiece.form = this.field.rotate(this.playedPiece.form);
       if (this.field.collide(this.playedPiece)) {
