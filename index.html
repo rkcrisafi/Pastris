@@ -8,15 +8,24 @@
     PASTRIS
   </div>
   <style media="screen">
+
+    .donut {
+      min-width: 600px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
     .pastris-name {
       font-family: Stencil Std, fantasy;
       font-size: 60px;
       font-weight: 900;
       color: #3cb4e5;
-      width: 600px;
+      width: 100%;
+      min-width: 600px;
       text-align: center;
       height: 30px;
-
+      z-index: 10;
     }
 
     body {
@@ -78,24 +87,27 @@
 
   <body>
 
-    <div  class="background">
+    <div class="donut">
 
-      <div class="score-line">
-        <div class="score-word">Score: </div>
-        <div id="score">0</div>
+      <div  class="background">
+
+        <div class="score-line">
+          <div class="score-word">Score: </div>
+          <div id="score">0</div>
+        </div>
+
+        <div class="canvas-div">
+          <canvas id="canvas" width=200 height=420  ></canvas>
+        </div>
+
+        <div class="instruction-bar">
+          <div class="restart">NEW GAME press "S"  </div>
+          <div class="pause">PAUSE press "P"</div>
+        </div>
+
+
+
       </div>
-
-      <div class="canvas-div">
-        <canvas id="canvas" width=200 height=420  ></canvas>
-      </div>
-
-      <div class="instruction-bar">
-        <div class="restart">NEW GAME press "S"  </div>
-        <div class="pause">PAUSE press "P"</div>
-      </div>
-
-
-
     </div>
     <script type="text/javascript" src="pastris/bundle.js">
 
