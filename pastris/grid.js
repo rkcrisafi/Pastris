@@ -75,6 +75,14 @@ updateScore() {
     });
   }
 
+  dropPiece(playedPiece, coefficient) {
+    let oldPiece = playedPiece;
+    while (oldPiece === playedPiece) {
+      playedPiece = this.hitBottom(playedPiece, coefficient);
+    }
+    return playedPiece;
+  }
+
   hitBottom(playedPiece, coefficient) {
     playedPiece.pos.y ++;
     if (this.collide(playedPiece)) {

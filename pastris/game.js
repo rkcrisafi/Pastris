@@ -110,6 +110,9 @@ class Game {
       if (this.field.collide(this.playedPiece)) {
         this.playedPiece.form = originalPiece;
       }
+    } else if (e.keyCode === 32 && !this.paused) {
+      e.preventDefault();
+      this.playedPiece = this.field.dropPiece(this.playedPiece, this.coefficient);
     } else if (e.key === "p") {
       this.paused = this.paused ? false : true;
     } else if (e.key === "s") {
