@@ -12,14 +12,18 @@ With Pastris, users will be able to:
 - Start, pause, and reset the game
 - Rotate pieces and move them left and right
 
-### Wireframes
-
-This app will consist of a single screen with game field and nav links to the Github and my LinkedIn. Game controls will include Left, Right, Down, Rotate, New Game and Pause buttons as well as Score and Instructions displays.
+This app consists of a single screen with game field and nav links to the Github and my LinkedIn. Game controls include Left, Right, Down, Rotate, New Game and Pause buttons as well as Score and Instructions displays.
 
 
-## MainScreen
-![wireframes]
+![Alt Text](/images/pastris_demo.gif)
 
 ### Architecture and Technologies
 
-This project will be implemented with `JavaScript` for the game logic using `HTML 5 Canvas` for rendering and `CSS 3` for styling.
+This project is implemented with `JavaScript` for the game logic using `HTML 5 Canvas` for rendering and `CSS 3` for styling.
+
+### Instructions
+
+- Press "s" to start/reset game
+- Press "p" to pause game
+- Use arrow keys to move a piece
+- Use arrow up to rotate a piece

@@ -60,154 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-
-
-
-
-class Game {
-  constructor () {
-    this.canvas = document.getElementById('canvas');
-    this.canvas.setAttribute("width", 200);
-    this.canvas.setAttribute("height", 420);
-    this.context = canvas.getContext('2d');
-
-    this.images = this.loadImages();
-    setTimeout(() => this.startNewGame(), 100);
-
-  }
-
-  startNewGame() {
-
-    this.context.fillStyle = '#ffffff';
-    this.context.fillRect(0, 0, canvas.width, canvas.height);
-
-    this.field = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](10, 21, this.context, this.canvas);
-    this.playedPiece = __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */].newPlayedPiece();
-    this.deleteEventListener();
-    this.setEventListener();
-    this.paused = false;
-    this.restart = false;
-
-    this.dropCounter = 0;
-    this.fallingInterval = 1000;
-    this.previousTime = 0;
-    this.update();
-  }
-
-  loadImages() {
-    const imageSources = ["images/banana_bread.png", "images/cherry_cake.png", "images/cookie.png", "images/cupcake.png", "images/donut.png", "images/ice_cream.png", "images/lolipop.png"];
-    return imageSources.map(source => {
-      const img = new Image();
-      img.src = source;
-      return img;
-    });
-
-  }
-
-
-  update(time = 0) {
-
-    if (!this.paused) {
-      const delta = time - this.previousTime;
-      this.previousTime = time;
-
-      this.dropCounter += delta;
-      if (this.dropCounter > this.fallingInterval) {
-
-        this.playedPiece = this.field.hitBottom(this.playedPiece);
-        this.dropCounter = 0;
-        if (this.field.score >= 135000) {
-          this.fallingInterval = 100;
-        } else if (this.field.score >= 45000) {
-          this.fallingInterval = 250;
-        } else if (this.field.score >= 15000){
-          this.fallingInterval = 500;
-        } else if (this.field.score >= 5000) {
-          this.fallingInterval = 750;
-        }
-      }
-      this.field.draw(this.playedPiece, this.images);
-    }
-    if (!this.field.gameOver) {
-      requestAnimationFrame(this.update.bind(this));
-    } else {
-      this.drawGameOver();
-
-    }
-  }
-
-  drawGameOver () {
-    this.context.font = '40px serif';
-    this.context.fillStyle = "red";
-    this.context.fillText('Game Over', 8, 220);
-  }
-
-  onKeydown (e) {
-    if (e.key === "ArrowDown" && (!this.paused)) {
-      e.preventDefault();
-      this.playedPiece = this.field.hitBottom(this.playedPiece);
-    } else if (e.key === "ArrowLeft" && !this.paused) {
-      e.preventDefault();
-      this.playedPiece.pos.x --;
-      if (this.field.collide(this.playedPiece)) {
-        this.playedPiece.pos.x ++;
-      }
-    } else if (e.key === "ArrowRight" && !this.paused) {
-      e.preventDefault();
-      this.playedPiece.pos.x ++;
-      if (this.field.collide(this.playedPiece)) {
-        this.playedPiece.pos.x --;
-      }
-    } else if (e.key === "ArrowUp" && !this.paused) {
-      e.preventDefault();
-      let originalPiece = this.playedPiece.form.map(el => el.slice());
-      this.playedPiece.form = this.field.rotate(this.playedPiece.form);
-      if (this.field.collide(this.playedPiece)) {
-        this.playedPiece.form = originalPiece;
-      }
-    } else if (e.key === "p") {
-      this.paused = this.paused ? false : true;
-    } else if (e.key === "s") {
-      this.startNewGame();
-    }
-  }
-
-  setEventListener() {
-    this.onKeydown = this.onKeydown.bind(this);
-    document.addEventListener('keydown', this.onKeydown);
-  }
-
-  deleteEventListener () {
-    document.removeEventListener('keydown', this.onKeydown);
-  }
-
-}
-
-function startGame(e) {
-  if (e.key === "s") {
-    let game = new Game();
-    document.removeEventListener("keydown", startGame);
-  }
-}
-
-document.addEventListener("keydown", startGame);
-// game1.startNewGame();
-
-
-/***/ }),
-/* 1 */,
-/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -292,11 +149,160 @@ const Piece = {
 
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__piece_js__ = __webpack_require__(2);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__grid_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(0);
+
+
+
+
+class Game {
+  constructor () {
+    this.canvas = document.getElementById('canvas');
+    this.canvas.setAttribute("width", 200);
+    this.canvas.setAttribute("height", 420);
+    this.context = canvas.getContext('2d');
+
+    this.images = this.loadImages();
+    setTimeout(() => this.startNewGame(), 100);
+
+  }
+
+  startNewGame() {
+
+    this.context.fillStyle = '#ffffff';
+    this.context.fillRect(0, 0, canvas.width, canvas.height);
+
+    this.field = new __WEBPACK_IMPORTED_MODULE_0__grid_js__["a" /* default */](10, 21, this.context, this.canvas);
+    this.playedPiece = __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */].newPlayedPiece();
+    this.deleteEventListener();
+    this.setEventListener();
+    this.paused = false;
+    this.restart = false;
+
+    this.dropCounter = 0;
+    this.fallingInterval = 1500;
+    this.coefficient = 1;
+    this.previousTime = 0;
+    this.update();
+  }
+
+  loadImages() {
+    const imageSources = ["images/banana_bread.png", "images/cherry_cake.png", "images/cookie.png", "images/cupcake.png", "images/donut.png", "images/ice_cream.png", "images/lolipop.png"];
+    return imageSources.map(source => {
+      const img = new Image();
+      img.src = source;
+      return img;
+    });
+
+  }
+
+
+  update(time = 0) {
+
+    if (!this.paused) {
+      const delta = time - this.previousTime;
+      this.previousTime = time;
+
+      this.dropCounter += delta;
+      if (this.dropCounter > this.fallingInterval) {
+
+        this.playedPiece = this.field.hitBottom(this.playedPiece, this.coefficient);
+        this.dropCounter = 0;
+        if (this.field.score >= 120000) {
+          this.fallingInterval = 100;
+          this.coefficient = 5;
+        } else if (this.field.score >= 60000) {
+          this.fallingInterval = 250;
+          this.coefficient = 4;
+        } else if (this.field.score >= 20000){
+          this.fallingInterval = 500;
+          this.coefficient = 3;
+        } else if (this.field.score >= 5000) {
+          this.fallingInterval = 750;
+          this.coefficient = 2;
+        } else if (this.field.score >= 1000) {
+          this.fallingInterval = 1000;
+        }
+      }
+      this.field.draw(this.playedPiece, this.images);
+    }
+    if (!this.field.gameOver) {
+      requestAnimationFrame(this.update.bind(this));
+    } else {
+      this.drawGameOver();
+
+    }
+  }
+
+  drawGameOver () {
+    this.context.font = '40px serif';
+    this.context.fillStyle = "red";
+    this.context.fillText('Game Over', 8, 220);
+  }
+
+  onKeydown (e) {
+    if (e.key === "ArrowDown" && (!this.paused)) {
+      e.preventDefault();
+      this.playedPiece = this.field.hitBottom(this.playedPiece, this.coefficient);
+    } else if (e.key === "ArrowLeft" && !this.paused) {
+      e.preventDefault();
+      this.playedPiece.pos.x --;
+      if (this.field.collide(this.playedPiece)) {
+        this.playedPiece.pos.x ++;
+      }
+    } else if (e.key === "ArrowRight" && !this.paused) {
+      e.preventDefault();
+      this.playedPiece.pos.x ++;
+      if (this.field.collide(this.playedPiece)) {
+        this.playedPiece.pos.x --;
+      }
+    } else if (e.key === "ArrowUp" && !this.paused) {
+      e.preventDefault();
+      let originalPiece = this.playedPiece.form.map(el => el.slice());
+      this.playedPiece.form = this.field.rotate(this.playedPiece.form);
+      if (this.field.collide(this.playedPiece)) {
+        this.playedPiece.form = originalPiece;
+      }
+    } else if (e.key === "p") {
+      this.paused = this.paused ? false : true;
+    } else if (e.key === "s") {
+      this.startNewGame();
+    }
+  }
+
+  setEventListener() {
+    this.onKeydown = this.onKeydown.bind(this);
+    document.addEventListener('keydown', this.onKeydown);
+  }
+
+  deleteEventListener () {
+    document.removeEventListener('keydown', this.onKeydown);
+  }
+
+}
+
+function startGame(e) {
+  if (e.key === "s") {
+    let game = new Game();
+    document.removeEventListener("keydown", startGame);
+  }
+}
+
+document.addEventListener("keydown", startGame);
+// game1.startNewGame();
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__piece_js__ = __webpack_require__(0);
 
 
 class Grid {
@@ -319,7 +325,8 @@ updateScore() {
   document.getElementById("score").innerText = this.score;
 }
 
-  destroyRow() {
+  destroyRow(coefficient) {
+    console.log(coefficient);
     let fullRows = [];
     this.grid.forEach((row, rowNumber) => {
       if (row.every(val => val !== 0)) {
@@ -328,13 +335,13 @@ updateScore() {
     });
     if (fullRows.length > 0) {
       if (fullRows.length === 1) {
-        this.score += 40;
+        this.score += (40 * coefficient);
       } else if (fullRows.length === 2) {
-        this.score += 100;
+        this.score += (100 * coefficient);
       } else if (fullRows.length === 3) {
-        this.score += 300;
+        this.score += (300 * coefficient);
       } else if (fullRows.length === 4) {
-        this.score += 1200;
+        this.score += (1200 * coefficient);
       }
       this.updateScore();
       fullRows.forEach(rowNum => {
@@ -373,7 +380,7 @@ updateScore() {
     });
   }
 
-  hitBottom(playedPiece) {
+  hitBottom(playedPiece, coefficient) {
     playedPiece.pos.y ++;
     if (this.collide(playedPiece)) {
       playedPiece.pos.y --;
@@ -381,7 +388,7 @@ updateScore() {
       playedPiece.pos.y = 0;
       playedPiece = __WEBPACK_IMPORTED_MODULE_0__piece_js__["a" /* default */].newPlayedPiece();
     }
-    this.destroyRow(score);
+    this.destroyRow(coefficient);
     this.isGameOver();
     return playedPiece;
   }

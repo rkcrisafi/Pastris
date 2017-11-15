@@ -27,7 +27,8 @@ class Game {
     this.restart = false;
 
     this.dropCounter = 0;
-    this.fallingInterval = 1000;
+    this.fallingInterval = 1500;
+    this.coefficient = 1;
     this.previousTime = 0;
     this.update();
   }
@@ -52,16 +53,22 @@ class Game {
       this.dropCounter += delta;
       if (this.dropCounter > this.fallingInterval) {
 
-        this.playedPiece = this.field.hitBottom(this.playedPiece);
+        this.playedPiece = this.field.hitBottom(this.playedPiece, this.coefficient);
         this.dropCounter = 0;
-        if (this.field.score >= 135000) {
+        if (this.field.score >= 120000) {
           this.fallingInterval = 100;
-        } else if (this.field.score >= 45000) {
+          this.coefficient = 5;
+        } else if (this.field.score >= 60000) {
           this.fallingInterval = 250;
-        } else if (this.field.score >= 15000){
+          this.coefficient = 4;
+        } else if (this.field.score >= 20000){
           this.fallingInterval = 500;
+          this.coefficient = 3;
         } else if (this.field.score >= 5000) {
           this.fallingInterval = 750;
+          this.coefficient = 2;
+        } else if (this.field.score >= 1000) {
+          this.fallingInterval = 1000;
         }
       }
       this.field.draw(this.playedPiece, this.images);
@@ -83,7 +90,7 @@ class Game {
   onKeydown (e) {
     if (e.key === "ArrowDown" && (!this.paused)) {
       e.preventDefault();
-      this.playedPiece = this.field.hitBottom(this.playedPiece);
+      this.playedPiece = this.field.hitBottom(this.playedPiece, this.coefficient);
     } else if (e.key === "ArrowLeft" && !this.paused) {
       e.preventDefault();
       this.playedPiece.pos.x --;

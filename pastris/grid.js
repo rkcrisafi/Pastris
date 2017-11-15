@@ -20,7 +20,8 @@ updateScore() {
   document.getElementById("score").innerText = this.score;
 }
 
-  destroyRow() {
+  destroyRow(coefficient) {
+    console.log(coefficient);
     let fullRows = [];
     this.grid.forEach((row, rowNumber) => {
       if (row.every(val => val !== 0)) {
@@ -29,13 +30,13 @@ updateScore() {
     });
     if (fullRows.length > 0) {
       if (fullRows.length === 1) {
-        this.score += 40;
+        this.score += (40 * coefficient);
       } else if (fullRows.length === 2) {
-        this.score += 100;
+        this.score += (100 * coefficient);
       } else if (fullRows.length === 3) {
-        this.score += 300;
+        this.score += (300 * coefficient);
       } else if (fullRows.length === 4) {
-        this.score += 1200;
+        this.score += (1200 * coefficient);
       }
       this.updateScore();
       fullRows.forEach(rowNum => {
@@ -74,7 +75,7 @@ updateScore() {
     });
   }
 
-  hitBottom(playedPiece) {
+  hitBottom(playedPiece, coefficient) {
     playedPiece.pos.y ++;
     if (this.collide(playedPiece)) {
       playedPiece.pos.y --;
@@ -82,7 +83,7 @@ updateScore() {
       playedPiece.pos.y = 0;
       playedPiece = Piece.newPlayedPiece();
     }
-    this.destroyRow(score);
+    this.destroyRow(coefficient);
     this.isGameOver();
     return playedPiece;
   }
