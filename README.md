@@ -27,3 +27,4 @@ This project is implemented with `JavaScript` for the game logic, `HTML 5 Canvas
 - Press "p" to pause game
 - Use arrow keys to move a piece
 - Use arrow up to rotate a piece
+- Push space bar to drop a piece
