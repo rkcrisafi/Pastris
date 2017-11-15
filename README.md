@@ -19,7 +19,7 @@ This app consists of a single screen with game field and nav links to the Github
 
 ### Architecture and Technologies
 
-This project is implemented with `JavaScript` for the game logic using `HTML 5 Canvas` for rendering and `CSS 3` for styling.
+This project is implemented with `JavaScript` for the game logic, `HTML 5 Canvas` for rendering and `CSS 3` for styling.
 
 ### Instructions
 
