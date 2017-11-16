@@ -1,0 +1,106 @@
+
+.donut {
+  min-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pastris-name {
+  font-family: Stencil Std, fantasy;
+  font-size: 60px;
+  font-weight: 900;
+  color: #3cb4e5;
+  width: 100%;
+  min-width: 600px;
+  text-align: center;
+  height: 50px;
+}
+
+body {
+  background-color: #4b1a05;
+}
+
+.background {
+  background-image: url('images/big_donut.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: space-around;
+  width: 600px;
+  height: 600px;
+  align-items: center;
+}
+
+.canvas-div {
+  width: 200px;
+  height: 420px;
+}
+
+#canvas {
+  border: 5px solid #FC5698;
+  background-color: #fc6598;
+  padding: 3px;
+  border-radius: 15px;
+}
+
+.instruction-bar, .score-line {
+  display: block;
+  border: 5px solid #000;
+  font-family: Stencil Std, fantasy;
+  font-weight: 700;
+  color: #3cb4e5;
+  background-color: #000;
+  padding: 10px;
+}
+
+.score-line {
+  display: flex;
+}
+
+
+.score-word {
+  padding-right: 5px;
+}
+
+#score {
+  padding-right: 50px;
+}
+
+.restart {
+  padding-bottom: 10px;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  color: #3cb4e5;
+}
+
+footer li {
+  list-style-type: none;
+  color: #3cb4e5;
+}
+
+.actions {
+  display: flex;
+}
+
+.actions a {
+  font-size: 30px;
+}
+
+
+.fa {
+  text-decoration: none;
+}
+
+.fa-linkedin, .fa-github, .fa-angellist {
+  padding: 10px;
+  color: #3cb4e5;
+  font-size: 30px;
+}
+
+.menu {
+  padding-top: 25px;
+}

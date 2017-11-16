@@ -128,7 +128,6 @@ const Piece = {
         row.forEach((val, x) => {
           if (val !== 0) {
             context.drawImage(images[val-1], blockSize*(x+move.x), blockSize*(y+move.y), blockSize, blockSize);
-            // context.fillRect(blockSize * (x + move.x), blockSize * (y + move.y), blockSize, blockSize);
           }
         });
       });
@@ -297,7 +296,6 @@ function startGame(e) {
 }
 
 document.addEventListener("keydown", startGame);
-// game1.startNewGame();
 
 
 /***/ }),

@@ -139,4 +139,3 @@ function startGame(e) {
 }
 
 document.addEventListener("keydown", startGame);
-// game1.startNewGame();
