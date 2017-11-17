@@ -1,4 +1,6 @@
-## Sample JS Project Proposal: Pastris
+# Pastris
+
+[Pastris live](http://rkcrisafi.github.io/Pastris/)
 
 ### Background
 
