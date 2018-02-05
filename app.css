@@ -1,4 +1,3 @@
-
 .donut {
   min-width: 600px;
   width: 100%;
@@ -58,6 +57,16 @@ body {
   display: flex;
 }
 
+.rules {
+  width: 850px;
+  display: block;
+  border: 5px solid #000;
+  font-family: Stencil Std, fantasy;
+  font-weight: 700;
+  color: #3cb4e5;
+  background-color: #000;
+  margin: auto;
+}
 
 .score-word {
   padding-right: 5px;

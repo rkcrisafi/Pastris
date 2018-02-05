@@ -21,7 +21,6 @@ updateScore() {
 }
 
   destroyRow(coefficient) {
-    console.log(coefficient);
     let fullRows = [];
     this.grid.forEach((row, rowNumber) => {
       if (row.every(val => val !== 0)) {
